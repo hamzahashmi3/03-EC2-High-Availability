@@ -12,7 +12,6 @@ The entire infrastructure is deployed inside a Virtual Private Cloud (VPC), whic
 
 Overall, this project simulates a real-world cloud architecture used in production environments.
 
-
 ## 🎯 Objectives
 
 * Build a **multi-AZ architecture**
@@ -22,6 +21,22 @@ Overall, this project simulates a real-world cloud architecture used in producti
 * Use **EFS for shared storage**
 * Use **EBS for instance storage & backups**
 * Learn **real production cloud design principles**
+
+## 🔹 Project Evolution
+
+This project was built in phases:
+
+### Phase 1 — Single Instance Setup
+- EC2 setup
+- Nginx deployment
+- EBS and EFS integration
+- Load Balancer setup
+
+### Phase 2 — High Availability (In Progress)
+- Multi-instance deployment
+- Auto Scaling Group (ASG)
+- Multi-AZ architecture
+- Load balancing across instances
 
 ## 🏗️ Architecture Summary
 
@@ -193,7 +208,7 @@ A **VPC (Virtual Private Cloud)** is a private network inside AWS where you can 
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/01-vpc-Created.png)
+![vpc-Created](screenshots/01-vpc-Created.png)
 
 ### 🔹 2. What is a Subnet?
 
@@ -242,7 +257,7 @@ A **Subnet** is a smaller network inside a VPC.
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/02-subnets-created.png)
+![subnets-created](screenshots/02-subnets-created.png)
 
 ### 🔧 Enable Public IP for Public Subnets
 
@@ -276,7 +291,7 @@ An **Internet Gateway (IGW)** allows your VPC to connect to the internet.
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/03-InternetGateway-created.png)
+![InternetGateway-created](screenshots/03-InternetGateway-created.png)
 
 ### 🔹 4. What is a Route Table?
 
@@ -306,7 +321,7 @@ A route table that allows internet access using:
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/04-public-Route-Table.png)
+![public-Route-Table](screenshots/04-public-Route-Table.png)
 
 ### 🔹 5. What is a Private Route Table?
 
@@ -329,7 +344,7 @@ A route table that does NOT allow direct internet access.
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/05-private-Route-Table.png)
+![private-Route-Table](screenshots/05-private-Route-Table.png)
 
 ### Final Outcome
 
@@ -381,7 +396,7 @@ A **Security Group** controls inbound and outbound traffic for resources like EC
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/06-Security-Group-for-ALB.png)
+![Security-Group-for-ALB](screenshots/06-Security-Group-for-ALB.png)
 
 ## 🔹 2. Create Security Group for EC2
 
@@ -408,7 +423,7 @@ A **Security Group** controls inbound and outbound traffic for resources like EC
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/07-Security-Group-for-EC2.png)
+![Security-Group-for-EC2](screenshots/07-Security-Group-for-EC2.png)
 
 ## 🔹 3. Create Security Group for EFS
 
@@ -432,7 +447,7 @@ A **Security Group** controls inbound and outbound traffic for resources like EC
 
 #### 📸 Screenshot:
 
-![Security Groups](screenshots/08-Security-Group-for-EFS.png)
+![Security-Group-for-EFS](screenshots/08-Security-Group-for-EFS.png)
 
 ### 🎯 Final Outcome
 
@@ -488,7 +503,7 @@ In this step, we configure both **shared storage (Amazon EFS)** and **instance-l
 
 👉 Attach Security Group: `hashmitech-efs-sg`
 
-![Security Groups](screenshots/09-EFS-created-Network-mounted.png)
+![EFS-created-Network-mounted](screenshots/09-EFS-created-Network-mounted.png)
 
 ## 🔹 Part 2. Mount EFS on EC2
 
@@ -499,7 +514,7 @@ In this step, we configure both **shared storage (Amazon EFS)** and **instance-l
 ```bash
 ssh -i .\hashmitech-key.pem ec2-user@35.178.185.17
 ```
-![Security Groups](screenshots/10-SSH-Ec2-connected.PNG)
+![SSH-Ec2-connected](screenshots/10-SSH-Ec2-connected.png)
 
 ### Install required package:
 
@@ -522,7 +537,7 @@ sudo mkdir -p /var/www/html/shared
 sudo mount -t efs fs-065d37b5abf8db5d2:/ /var/www/html/shared
 ```
 
-![Security Groups](screenshots/11-EFS-attached-to-ec2(mounted).PNG)
+![EFS-attached-to-ec2](screenshots/11-EFS-attached-to-ec2(mounted).png)
 
 ## 🔹 Part 3. Mount EBS on EC2
 
@@ -538,13 +553,13 @@ sudo mount -t efs fs-065d37b5abf8db5d2:/ /var/www/html/shared
 - Select EBS volume -> "hashmi-ebs-volume"
 - Select Device Name -> "/dev/xvdf"
 
-![Security Groups](screenshots/12-EBS-attached-to-EC2.PNG)
+![EBS-attached-to-EC2](screenshots/12-EBS-attached-to-EC2.png)
 
 ### 👉 Step C — Check in EC2 terminal
 ``` bash
 lsblk
 ```
-![Security Groups](screenshots/13-EBS-attached-to-EC2.PNG)
+![EBS-volume-created](screenshots/13-EBS-volume-created.png)
 
 ### 👉 Step D. Format EBS
 ``` bash
@@ -558,12 +573,12 @@ sudo mount /dev/nvme1n1 /data
 ```
 ### - verify
 
-- Data should be visiable
+- Data should be visible
 
 ``` bash
 df -h
 ```
-![Security Groups](screenshots/14-EBS-mounted.PNG)
+![EBS-mounted](screenshots/14-EBS-mounted.png)
 
 
 ### ✅ Step 4 — EC2 Setup (Nginx + Dynamic Website)
@@ -582,7 +597,7 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 sudo systemctl status nginx
 ```
-![Security Groups](screenshots/15-nginx-installed.PNG)
+![nginx-installed](screenshots/15-nginx-installed.png)
 
 ### 🔹 C. Test Nginx
 
@@ -631,7 +646,7 @@ cat /usr/share/nginx/html/index.html
 - Open browser:
 - http://YOUR_PUBLIC_IP
 
-![Security Groups](screenshots/15-nginx-installed.PNG)
+![Nginx-running](screenshots/16-Nginx-running.png)
 
 ## ✅  Step 5 — Load Balancer (ALB + Target Group)
 
@@ -683,6 +698,8 @@ Edit the Target Group:
 
 💡 ALB will only send traffic to healthy instances.
 
+![Target-group-created](screenshots/17-target-group-created.png)
+
 ## 🔹 C. Create Application Load Balancer (ALB)
 
 ### 📍 Steps:
@@ -712,6 +729,8 @@ Edit the Target Group:
 
 👉 Click **Create Load Balancer**
 
+![ALB-Created](screenshots/18-ALB-Created.png)
+
 ## 🔹 D. Test Load Balancer
 
 After ALB is created:
@@ -720,23 +739,195 @@ After ALB is created:
 2. Open in browser:
 
 ```bash 
-id="alb-test"
 http://YOUR-ALB-DNS
+http://hashmitech-alb-1806645173.eu-west-2.elb.amazonaws.com
 ```
 ### 🔹 E. Verify Load Balancing
 
 Refresh the page multiple times.
-👉 You should see:
+👉 Currently (Single Instance):
+- Same Instance ID will appear on refresh
 
-- Different Instance IDs
-- Different Availability Zones
+👉 After adding multiple instances:
+- Different Instance IDs will appear
+- Different Availability Zones will be visible
 
 💡 This confirms traffic is distributed across multiple EC2 instances.
 
-### ✅ Step 6 — Auto Scaling
+### 💡 Note:
+- The current setup demonstrates the foundational architecture.
+- High availability is achieved in the next phase by introducing multiple EC2 instances and Auto Scaling.
 
-* Create Launch Template
-* Create ASG (min=2, max=4)
+## ----------------------------------------------------------
+
+## 🔹 Project Evolution
+
+This project was implemented in phases:
+
+### Phase 1 — Foundation
+- VPC, subnets, route tables, IGW
+- Security groups
+- EFS and EBS setup
+- Nginx on EC2
+- ALB and target group
+
+### Phase 2 — High Availability
+- Launch Template created
+- Auto Scaling Group configured across two private subnets
+- Desired capacity set to 2, max capacity set to 4
+- ALB target group attached to ASG
+- Instances automatically registered and deregistered through ASG
+- Load balancing verified across multiple Availability Zones
+
+## ----------------------------------------------------------
+
+### ✅ Step 6 — Auto Scaling Group (ASG)
+
+- Goto EC2 Console → Launch Templates → Create launch template.
+
+### Step A. Launch Template
+- Launch template name: "hashmitech-lt"
+- Template version description: "v1 for HA project"
+- AMI: Same as Amazon Linux 2023 used earlier
+- Instance type: same as earlier
+- Key pair: "hashmitech-key"
+- Security Group: "hashmitech-ec2-sg"
+- IAM instance profile / role: same role which we used for S3/EFS, if needed.
+- Subnet: Don't normally fix subnet in launch template; will choose during ASG
+
+- 👉 Advanced details → User data:
+
+```bash
+#!/bin/bash
+dnf update -y
+dnf install -y nginx amazon-efs-utils
+
+mkdir -p /var/www/html/shared
+mount -t efs fs-065d37b5abf8db5d2:/ /var/www/html/shared || true
+
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
+INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/instance-id)
+AZ=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+cat > /usr/share/nginx/html/index.html <<EOF
+<h1>HashmiTech EC2 High Availability Project</h1>
+<p>Instance: $INSTANCE_ID</p>
+<p>AZ: $AZ</p>
+<p>Status: Running from Auto Scaling Group</p>
+EOF
+
+systemctl enable nginx
+systemctl start nginx
+```
+![Launch-template](screenshots/19-Launching-template.png)
+
+### Step B. Cretae Auto Scaling Group
+- Goto EC2 Console → Auto Scaling Groups → Create Auto Scaling group.
+
+- ASG name `hashmitech-asg`
+- Launch template: `hashmitech-lt`
+- VPC: `hashmitech-vpc`
+- Subnets: `private-subnet-a`, `private-subnet-b`
+
+## 👉 Load balancing
+- Attach to an existing load balancer
+- Choose existing target group
+- Select: `hashmitech-tg`
+
+## 💡 Note:
+ According to AWS when we attach ASG to target group, a new instance automatically gets register in targer group.
+
+## 👉 Health checks
+- Turn on Elastic Load Balancing health checks
+- Health check grace period: 60–120 sec
+
+## 💡 Note:
+According to AWS EC2 health checks are there by default, but by turning on ELB health checks, replacing the unhealthy ALB instances becomes possible.
+
+## 👉 Group size
+- Desired capacity: 2
+- Minimum capacity: 2
+- Maximum capacity: 4
+## 💡 Note:
+- Desired capacity is that number which maintain ASG.
+
+## 👉 Scaling policy
+
+- simplest for now:
+- Target tracking scaling policy
+- Metric: Average CPU utilization
+- Target value: 50%
+
+## 💡 Note:
+- Target tracking scaling automatically up/down capacity according to demand.
+
+![ASG-created](screenshots/20-ASG-created.png)
+
+## Step C. Wait and check the instances
+- 👉 Where to check:
+
+- Goto EC2 → Auto Scaling Groups → hashmitech-asg → Activity / Instance management
+- 2 instances should be visible.
+
+![ASG-instances](screenshots/21-ASG-instances-different-AZ.pn.png)
+
+- 👉 Then:
+- Goto EC2 → Target Groups → hashmitech-tg → Targets
+
+- 👉 Expected:
+- 2 new ASG instances
+- Status: healthy
+## 💡 Note:
+ALB target groups only give traffic to healthy targets.
+
+![target-group-healty](screenshots/22-target-group-healthy-target-group.png)
+
+## Step C. Remove the old EC2 from target group.
+
+- 👉 When 2 instances from ASG become healthy, then:
+- Goto EC2 → Target Groups → hashmitech-tg → Targets
+
+- 👉 Select the old EC2 instance: `Deregister`
+
+ 💡 Why?
+- SO all the traffic only goes to the ASG managed instances.
+
+## Step D. Verify load balancing
+
+- 👉 Now open browser and do multiple refresh:
+- Each time:
+
+- different Instance IDs
+- different AZs
+
+- Because now behind the ALB there are multiple healthy instances. this the the job of ALB to distribute traffic between targets.
+
+![ALB-multi-AZ](screenshots/23-Auot-load-balancer-Multi-AZ.png)
+
+![ALB-multi-AZ](screenshots/24-Auot-load-balancer-Multi-AZ.png)
+
+### Test through terminal:
+``` bash
+for i in {1..10}; do curl http://hashmitech-alb-1806645173.eu-west-2.elb.amazonaws.com; echo; done
+```
+
+## Step E. Auto recovery test
+
+## Test A — instance terminate
+
+- Goto EC2 → Instances
+- Select 1 ASG instance select karo → terminate
+
+- 👉 Expected:
+
+- ASG will consider that unhealthy/terminatedand and will launch the replacement.
+- desired capacity 2 will be maintained.
+
+![ASG-instances](screenshots/25-ASG-instances.png)
+
+## Test B — health check fail
+
+- if in any instance nginx will stop, ALB will mark that unhealthy, and if ELB health checks are enable so it will help in replacement.
 
 ### ✅ Step 7 — Scaling Policy
 
