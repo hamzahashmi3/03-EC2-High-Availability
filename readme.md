@@ -40,7 +40,7 @@ This project was built in phases:
 
 ## 🏗️ Architecture Summary
 
-```
+```bash
 User → ALB → Auto Scaling Group → EC2 (Multi-AZ) → EFS / EBS
 ```
 
